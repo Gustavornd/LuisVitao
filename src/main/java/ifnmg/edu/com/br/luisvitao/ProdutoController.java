@@ -15,20 +15,28 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author Lucas Flavio<lucasfgm at ifnmg.edu.br>
  */
 
+
+
 @Controller
 public class ProdutoController {
+
+
+private ProdutoServiceLocal pc;
+    
  @RequestMapping(value = "/produto", method = RequestMethod.GET)
  public ModelAndView produto(){
      return new ModelAndView("produto", "command", new Produto());
- }   
+ }
+ 
  
  @RequestMapping(value = "/addProduto", method = RequestMethod.POST)
- public String adicionarProduto(
+ public void adicionarProduto(
   @ModelAttribute("SpringWeb") Produto produto, ModelMap model,
   HttpServletRequest request) {
 
@@ -44,13 +52,13 @@ public class ProdutoController {
     List<Produto> produtos = (List<Produto>)
     request.getSession().getAttribute("produtos");
     if(produtos == null){
-        produtos = new ArrayList<Produto>();
+        produtos = new ArrayList<>();
     }
-    
+    pc.salvar(produto);
     produtos.add(produto);
     request.getSession().setAttribute("produtos", produtos);
     
-    return "exibeProduto";
+    
     
 }
  
